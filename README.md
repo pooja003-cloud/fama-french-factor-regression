@@ -154,9 +154,9 @@ The post-2024 data is used to re-test the findings, not to re-tune the model. Wi
 
 **Regression.** For each fund, ordinary least squares (OLS) estimates
 
-$$
-R_{t} - RF_{t} = \alpha + \beta_{M}(Mkt_{t} - RF_{t}) + \beta_{S}\,SMB_{t} + \beta_{H}\,HML_{t} + \beta_{R}\,RMW_{t} + \beta_{C}\,CMA_{t} + \beta_{U}\,MOM_{t} + \varepsilon_{t}
-$$
+```math
+R_{t} - RF_{t} = \alpha + \beta_{M}(Mkt_{t} - RF_{t}) + \beta_{S}SMB_{t} + \beta_{H}HML_{t} + \beta_{R}RMW_{t} + \beta_{C}CMA_{t} + \beta_{U}MOM_{t} + \varepsilon_{t}
+```
 
 with smaller models dropping terms from the right. Alpha is reported annualized (monthly × 12).
 
@@ -178,9 +178,9 @@ Each is applied to two families of tests: all 36 fund-and-model tests in a perio
 
 **Testing for changed exposures.** Both periods are pooled, with an indicator $POST_t$ equal to 1 from March 2024:
 
-$$
-y_{t} = \alpha + \beta' f_{t} + \delta\,POST_{t} + \gamma' (f_{t} \cdot POST_{t}) + \varepsilon_{t}
-$$
+```math
+y_{t} = \alpha + \beta' f_{t} + \delta \cdot POST_{t} + \gamma' (f_{t} \cdot POST_{t}) + \varepsilon_{t}
+```
 
 $\delta$ is the change in alpha, each element of $\gamma$ the change in a loading, and a joint Wald test checks whether any loading changed.
 
