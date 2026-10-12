@@ -8,6 +8,31 @@ This project regresses the monthly excess returns of 9 funds and ETFs on the CAP
 
 ![Alpha by model](results/figures/alpha_by_model_original.png)
 
+## Key findings
+
+Data: Ken French factors through 2026-08, Newey-West lags = 6, alphas annualized. Full tables are in [`results/summary.md`](results/summary.md).
+
+1. **No fund earns alpha that survives the multiple-testing correction.** That is 0 of 72 fund × model × period tests, and the verdict holds whether the Newey-West window is 3, 6 or 12 lags.
+2. **Where CAPM alpha was positive, adding factors shrinks it.** Neither of these CAPM alphas was statistically significant to begin with: the apparent outperformance was mostly growth and investment-style tilts, not skill.
+
+   | Fund | CAPM alpha | FF5+MOM alpha | Main tilts |
+   |---|---|---|---|
+   | IWF (growth) | +1.71% | +0.75% | Value −0.21, investment −0.14 |
+   | Fidelity Contrafund | +1.38% | +0.55% | Investment −0.24, value −0.12 |
+
+3. **The factors explain almost everything for broad ETFs.** FF5+MOM R² is 0.97-1.00 for SPY, IWM, IWD and IWF, against 0.78-0.91 for the thematic funds (ARKK, BOTZ, AIQ), whose returns depend more on fund-specific bets.
+4. **The strongest result is negative.** IWM (small caps) earned about −1.4% a year after factors (t ≈ −3.0). It is significant at 5% on its own but not after Bonferroni (adjusted p = 0.10-0.13), which shows why the correction matters.
+5. **ARKK is mostly a bundle of factor bets.** It has market beta 1.55, a strong growth tilt (value −0.64) and a very negative profitability loading (−1.20), meaning it leaned toward unprofitable companies.
+6. **Sanity check passes.** SPY has CAPM beta 0.96-1.00 and alpha under 0.5% a year in both periods. Its small negative size loading (−0.12) is expected, because the French market factor includes small caps.
+
+### Does it still hold after 2024? (2024-03 to 2026-08, 30 months)
+
+- **The AI funds' post-2024 returns were driven mainly by market beta, not momentum.** AIQ's market beta rose from 1.06 to 1.39 and BOTZ's from 1.24 to 1.41. Their momentum loadings barely changed (BOTZ +0.28, t = 1.7; AIQ +0.14, t = 0.9).
+- **No new alpha appeared.** BOTZ shows −16% a year of FF5+MOM alpha after 2024 (t = −2.0 under the small-sample guard), but it is not significant after Bonferroni over 30 months.
+- **Exposures do drift.** For the pre/post-2024 change in loadings, the joint test rejects "unchanged" at 5% for 7 of 9 funds. ARKK (p = 0.09) and BOTZ (p = 0.18) are the exceptions, partly because their samples are short and noisy.
+
+All post-2024 estimates rest on 30 months of data, so treat them as indicative.
+
 ## Funds
 
 | Ticker | Fund | Role | Sample |
@@ -93,8 +118,8 @@ The test suite simulates factor returns and funds with **known** alphas and load
 
 ## Interview talking points
 
-- **Most "alpha" is factor exposure.** CAPM alpha measures performance against the market only. A fund that tilts toward small, cheap, profitable or recently winning stocks will show CAPM alpha simply because those tilts earned premiums. Adding the factors re-labels that return as beta, which can be bought cheaply through ETFs. The alpha-by-model chart shows this directly.
-- **R² tells you how much is left to explain.** Broad ETFs typically have R² well above 0.9 in the 5-factor model; little room remains for skill. Thematic and active funds have lower R², so idiosyncratic bets drive more of their returns, in either direction.
+- **Most "alpha" is factor exposure.** CAPM alpha measures performance against the market only. A fund that tilts toward small, cheap, profitable or recently winning stocks will show CAPM alpha simply because those tilts earned premiums. Adding the factors re-labels that return as beta, which can be bought cheaply through ETFs. In this sample, IWF's CAPM alpha falls from +1.7% to +0.75% and Contrafund's from +1.4% to +0.55%. Neither was significant to begin with, which is the more honest point: the apparent outperformance was never reliable, and most of it is factor tilts.
+- **R² tells you how much is left to explain.** Broad ETFs here have R² of 0.97-1.00 in the factor model, so little room remains for skill. Thematic and active funds have lower R², so idiosyncratic bets drive more of their returns, in either direction.
 - **Significance needs care.** Monthly returns are autocorrelated and heteroskedastic (Newey-West), you test many funds (Bonferroni), and short samples can make HAC standard errors misleadingly small (the guard above).
 - **Exposures drift.** The rolling charts show loadings are not constant; a fund's "style" in one window can differ sharply from another, which matters for risk management and for judging a manager.
 - **Out-of-sample discipline.** Re-testing on post-2024 data rather than re-tuning on it.
