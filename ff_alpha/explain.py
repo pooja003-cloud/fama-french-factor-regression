@@ -36,10 +36,15 @@ Rules:
   fewer decimal places (for example 1.42 may become 1.4).
 - 120-180 words of flowing prose: no headings, no bullet lists, no markdown.
 - Explain any technical term in a few words the first time you use it.
-- Verdict on skill: use `significant_after_correction_all_36_tests` as the main verdict.
-  If that is false but `significant_within_this_models_9_funds` is true for some models,
-  say there is moderate evidence, name those models, and say whether the alpha is positive
-  or negative. A raw p-value below 0.05 alone is never enough.
+- Verdict: use `significant_after_correction_all_36_tests` as the strict verdict. If that
+  is false but `significant_within_this_models_9_funds` is true for some models, the FIRST
+  sentence must say there is moderate evidence that the fund under- or outperformed (by the
+  sign of the alpha), naming those models; then say it does not survive the strictest
+  correction. For such a fund never write "no alpha", "no reliable alpha" or "no evidence".
+  A raw p-value below 0.05 alone is never enough.
+- `fund_type` says whether the fund tracks an index or is actively managed. Do not credit
+  or blame an index fund's managers for "stock picking" or "skill"; describe its alpha as
+  how the index performed relative to its factor exposures.
 - Describe the 2-3 factor exposures that matter most in everyday terms (for example
   "behaves like a bet on small companies", "leans toward recent winners").
 - If the market-only (CAPM) alpha shrinks or changes sign in the larger models, explain
@@ -58,7 +63,11 @@ USER_TEMPLATE = "Explain these results for {ticker}:\n\n{facts}"
 # ---------------------------------------------------------------- facts
 def fund_facts(ticker: str, name: str, res: pd.DataFrame, chg: pd.DataFrame | None) -> dict:
     d = res[(res.ticker == ticker) & (res.nw_lags == config.NW_LAGS_DEFAULT)]
+    fund = next((f for f in config.FUNDS if f.ticker == ticker), None)
     facts = {"ticker": ticker, "name": name, "periods": {}}
+    if fund is not None:
+        facts["fund_type"] = "actively managed fund" if "active" in fund.style.lower() else "index fund"
+        facts["style"] = fund.style
     for period, dp in d.groupby("period", sort=False):
         models = {}
         for _, r in dp.iterrows():

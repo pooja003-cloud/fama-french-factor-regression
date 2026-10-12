@@ -18,6 +18,7 @@ def facts():
 
 def test_number_check(facts):
     _, f = facts
+    assert f["fund_type"] == "index fund"
     capm = f["periods"]["Main period 2010-2023"]["models"]["CAPM"]
     a = capm["alpha_pct_per_year"]
     r2 = capm["r_squared"]
