@@ -98,6 +98,9 @@ def change_table(chg: pd.DataFrame) -> pd.DataFrame:
     for c in cols:
         out[f"Δ {c}"] = [f"{b:.2f} ({t:.1f})" for b, t in zip(chg[f"d_{c}"], chg[f"dt_{c}"])]
     out["p (all loadings unchanged)"] = chg.loadings_changed_p.map(lambda p: _fmt(p, 3))
+    if "loadings_changed_p_holm" in chg:
+        out["p Holm (9 funds)"] = chg.loadings_changed_p_holm.map(lambda p: _fmt(p, 3))
+        out["p Bonferroni (9 funds)"] = chg.loadings_changed_p_bonf.map(lambda p: _fmt(p, 3))
     return out
 
 
@@ -249,3 +252,19 @@ def plot_r2(res: pd.DataFrame, period: str, path: Path, title_suffix: str = "") 
     fig.tight_layout()
     fig.savefig(path, dpi=160)
     plt.close(fig)
+
+
+def family_table(res: pd.DataFrame) -> pd.DataFrame:
+    """For each period x model x lag: smallest alpha p-value corrected across the
+    9 funds of that model, and how many funds are significant."""
+    rows = []
+    order = {m: i for i, m in enumerate(config.MODELS)}
+    for (period, model, lag), d in res.groupby(["period", "model", "nw_lags"], sort=False):
+        best = d.loc[d.alpha_p.idxmin()]
+        rows.append({"Period": period, "Model": model, "NW lags": lag, "Fund": best.ticker,
+                     "Alpha (% / yr)": _fmt(best.alpha_ann * 100),
+                     "p Bonferroni (9)": _fmt(best.alpha_p_bonf_model, 3),
+                     "p Holm (9)": _fmt(best.alpha_p_holm_model, 3),
+                     "Significant funds (Holm)": int(d.sig_holm_model.sum()), "_o": order[model]})
+    out = pd.DataFrame(rows).sort_values(["Period", "_o", "NW lags"], key=lambda c: c if c.name != "Period" else c.str.startswith("Ext"))
+    return out.drop(columns="_o")

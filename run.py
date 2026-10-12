@@ -61,6 +61,13 @@ def main() -> None:
     res.to_csv(out / "regressions.csv", index=False)
     chg.to_csv(out / "structural_change.csv", index=False)
 
+    # Robustness: start the extension in January 2024 instead of March
+    r_jan, _ = models.run_period(rets, factors, pd.Period("2024-01", "M"), ext_end,
+                                 config.MIN_MONTHS_EXTENSION, f"Extension 2024-01 to {ext_end}",
+                                 (config.NW_LAGS_DEFAULT,))
+    r_jan = models.bonferroni(r_jan)
+    r_jan.to_csv(out / "extension_from_jan2024.csv", index=False)
+
     # 5. Rolling -------------------------------------------------------------
     print("Rolling 36-month regressions...")
     roll = rolling.rolling_loadings(rets, factors, end=ext_end)
@@ -98,6 +105,17 @@ def main() -> None:
                f"![loadings](figures/loadings_{tag}.png)\n",
                "### Robustness: alpha t-stat by Newey-West lag\n",
                report._md_table(report.robustness_table(res, p)), "\n"]
+        if i > 0:
+            md += ["_In this short sample the short-sample guard floors most standard errors at the "
+                   "plain OLS value, so many t-statistics are identical across lags. This is expected; "
+                   "the unguarded Newey-West t-statistics are in `regressions.csv` (`alpha_t_nw_raw`)._\n"]
+    md += ["## How the verdict depends on the test family\n",
+           "Smallest adjusted p-value in each period when correcting across the 9 funds within one "
+           "model, instead of across all 36 fund-model tests.\n",
+           report._md_table(report.family_table(res)), "\n",
+           f"## Extension starting January 2024 instead of March\n",
+           f"Significant alphas after Bonferroni (36 tests): {int(r_jan.sig_bonf.sum())} of {len(r_jan)}.\n",
+           report._md_table(report.alpha_table(r_jan, r_jan.period.iloc[0])), "\n"]
     md += ["## Did it hold after 2024? Change in FF5+MOM alpha and loadings, Δ (t-stat)\n",
            report._md_table(report.change_table(chg)) if not chg.empty else "_Not enough data._", "\n",
            "![rolling](figures/rolling_ai_vs_market.png)\n"]

@@ -41,7 +41,8 @@ def test_first_full_month_and_min_months(synth):
 
 
 def test_bonferroni():
-    df = pd.DataFrame({"period": ["a"] * 4, "nw_lags": [6] * 4, "alpha_p": [0.001, 0.02, 0.3, 0.9]})
+    df = pd.DataFrame({"period": ["a"] * 4, "nw_lags": [6] * 4, "model": ["m1", "m1", "m2", "m2"],
+                       "alpha_p": [0.001, 0.02, 0.3, 0.9]})
     out = models.bonferroni(df)
     assert list(out.alpha_p_bonf) == pytest.approx([0.004, 0.08, 1.0, 1.0])
     assert list(out.sig_bonf) == [True, False, False, False]
@@ -51,6 +52,9 @@ def test_bonferroni():
     assert (out.alpha_p_holm <= out.alpha_p_bonf + 1e-12).all()
     # Benjamini-Hochberg: p x m / rank, made monotone
     assert list(out.alpha_p_bh) == pytest.approx([0.004, 0.04, 0.4, 0.9])
+    # per-model family: 2 tests per model
+    assert list(out.alpha_p_bonf_model) == pytest.approx([0.002, 0.04, 0.6, 1.0])
+    assert list(out.sig_holm_model) == [True, True, False, False]
 
 
 def test_structural_change_detects_momentum_shift(synth):

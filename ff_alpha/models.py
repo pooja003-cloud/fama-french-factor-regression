@@ -106,6 +106,19 @@ def bonferroni(results: pd.DataFrame, alpha_level: float = config.SIGNIFICANCE) 
         out.loc[idx, "alpha_p_bh"] = multipletests(p, method="fdr_bh")[1]
     out["sig_holm"] = out["alpha_p_holm"] < alpha_level
     out["sig_bh"] = out["alpha_p_bh"] < alpha_level
+
+    # Second, narrower family: the 9 funds within ONE model (and period, lag).
+    # The four models for a fund are nested and highly correlated, so the
+    # 36-test family above is conservative; this one treats each model as a
+    # separate primary specification.
+    out["alpha_p_bonf_model"] = np.nan
+    out["alpha_p_holm_model"] = np.nan
+    for _, idx in out.groupby(["period", "nw_lags", "model"]).groups.items():
+        p = out.loc[idx, "alpha_p"].to_numpy()
+        out.loc[idx, "alpha_p_bonf_model"] = multipletests(p, method="bonferroni")[1]
+        out.loc[idx, "alpha_p_holm_model"] = multipletests(p, method="holm")[1]
+    out["sig_bonf_model"] = out["alpha_p_bonf_model"] < alpha_level
+    out["sig_holm_model"] = out["alpha_p_holm_model"] < alpha_level
     return out
 
 
@@ -152,4 +165,9 @@ def structural_change(returns: pd.DataFrame, factors: pd.DataFrame, model: str =
         w = fit.wald_test(R, scalar=True)
         row["loadings_changed_p"] = float(w.pvalue)
         rows.append(row)
-    return pd.DataFrame(rows)
+    out = pd.DataFrame(rows)
+    if not out.empty:  # correct the joint tests across funds, like the alphas
+        p = out["loadings_changed_p"].to_numpy()
+        out["loadings_changed_p_bonf"] = multipletests(p, method="bonferroni")[1]
+        out["loadings_changed_p_holm"] = multipletests(p, method="holm")[1]
+    return out
