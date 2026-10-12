@@ -1,13 +1,15 @@
 """Run the full study.
 
     python run.py                 # real data -> results/
-    python run.py --no-llm        # skip the LLM add-on (template explanations)
+    python run.py --llm claude_code   # fund summaries via Claude Code (Pro plan, no API key)
+    python run.py --no-llm        # same as --llm template
     python run.py --refresh       # re-download factors and prices
     python run.py --demo          # simulated data with known answers -> results_demo/
 """
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -21,7 +23,9 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--demo", action="store_true", help="use synthetic data (offline pipeline check)")
     ap.add_argument("--refresh", action="store_true", help="ignore cached downloads")
-    ap.add_argument("--no-llm", action="store_true", help="template explanations instead of an LLM")
+    ap.add_argument("--llm", choices=explain.PROVIDERS, default=config.LLM_PROVIDER,
+                    help="who writes the fund summaries (default: %(default)s)")
+    ap.add_argument("--no-llm", action="store_true", help="same as --llm template")
     args = ap.parse_args()
 
     out = ROOT / ("results_demo" if args.demo else "results")
@@ -122,11 +126,13 @@ def main() -> None:
     (out / "summary.md").write_text("\n".join(md))
 
     # 6. AI add-on -------------------------------------------------------------
-    print("Writing plain-English explanations...")
-    text, source = explain.explain_all(res, chg, names, use_llm=not args.no_llm)
+    provider = "template" if args.no_llm else args.llm
+    print(f"Writing fund summaries ({provider})...")
+    text, source, audit = explain.explain_all(res, chg, names, provider=provider)
     if args.demo:
-        text = text.replace("# Plain-English results", "# Plain-English results [SYNTHETIC DATA]", 1)
+        text = text.replace("# Fund summaries", "# Fund summaries [SYNTHETIC DATA]", 1)
     (out / "explanations.md").write_text(text)
+    (out / "explanations_check.json").write_text(json.dumps({"source": source, "funds": audit}, indent=2))
 
     print("\n" + report.sanity_check(res))
     n_sig = res[(res.nw_lags == config.NW_LAGS_DEFAULT) & res.sig_bonf]

@@ -64,5 +64,11 @@ FACTOR_LABELS = {
     "MOM": "Momentum",
 }
 
-# LLM add-on (Anthropic API). Override with the FF_LLM_MODEL env variable.
-LLM_MODEL_DEFAULT = "claude-sonnet-5-5"
+# Fund summaries written by a language model (see ff_alpha/explain.py).
+# Provider names match my llm-earnings-signal project.
+#   claude_code  Claude Code CLI signed in with a Claude Pro/Max plan. No API key.
+#   anthropic    Claude API with ANTHROPIC_API_KEY (pay as you go).
+#   template     fixed template, no language model.
+LLM_PROVIDER = "template"          # default for `python run.py`; override with --llm
+CLAUDE_CODE_MODEL = "sonnet"       # alias: haiku | sonnet | opus (env FF_CLAUDE_CODE_MODEL)
+LLM_MODEL_DEFAULT = "claude-sonnet-5-5"  # anthropic provider only (env FF_LLM_MODEL)
