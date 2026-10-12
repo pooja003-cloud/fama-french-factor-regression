@@ -18,7 +18,7 @@ I took 9 well-known funds: broad index funds, an actively managed fund and three
 
 ### What I found
 
-None of the 9 funds shows alpha that holds up statistically: 0 of 72 statistical tests survive the correction for testing many funds at once. Where a fund appeared to beat the market, most of that edge disappeared once its tilts toward growth stocks and particular company types were taken into account. The artificial-intelligence funds' returns after 2024 came mainly from moving more sharply with the overall market, not from skill.
+No fund shows positive alpha that holds up statistically. Under the strictest test (correcting across all 72 statistical tests at once), none survives. The one result that does hold up under a narrower, still standard test is *negative*: the Russell 2000 small-company fund returned about 1.4% a year less than its factor exposures predict. Where a fund appeared to beat the market, most of that edge disappeared once its tilts toward growth stocks and particular company types were taken into account. The artificial-intelligence funds' returns after 2024 came mainly from moving more sharply with the overall market, not from skill.
 
 ![Annualized alpha by model](results/figures/alpha_by_model_main_period.png)
 
@@ -79,7 +79,7 @@ ETF stands for exchange-traded fund. PDP is used for momentum rather than the iS
 
 All figures use Kenneth French factor data through August 2026 and are annualized. Full tables are in [`results/summary.md`](results/summary.md). Terms are defined in the [glossary](#glossary).
 
-1. **No fund earns alpha that survives the multiple-testing correction.** Across 72 statistical tests of alpha (9 funds × 4 models × 2 periods), none is significant.
+1. **No fund earns positive alpha that survives correction for multiple testing.** Correcting across all 72 statistical tests of alpha (9 funds × 4 models × 2 periods), none is significant. With a narrower family, one model at a time, only IWM's *negative* alpha passes (see [below](#how-the-verdict-depends-on-what-counts-as-the-family-of-tests)).
 2. **Where alpha looked positive against the market alone, adding factors shrinks it.** Neither of these market-only alphas was statistically significant to begin with.
 
    | Fund | Alpha vs market only | Alpha after six factors | Main tilts (loadings) |
@@ -88,13 +88,13 @@ All figures use Kenneth French factor data through August 2026 and are annualize
    | Fidelity Contrafund (FCNTX) | +1.38% | +0.55% | Investment −0.24, value −0.12 |
 
 3. **The factors explain almost everything for broad index funds.** The six-factor model explains 97-100% of the monthly return variation (R²) for the S&P 500, Russell 2000, value and growth funds, against 78-91% for the thematic funds.
-4. **The strongest result is negative.** The Russell 2000 small-company fund (IWM) returned about 1.4% a year *less* than its factor exposures predict (t-statistic ≈ −3.0). That is significant on its own, but not after correcting for the number of tests.
+4. **The strongest result is negative.** The Russell 2000 small-company fund (IWM) returned about 1.4% a year *less* than its six-factor exposures predict (t-statistic ≈ −3.0). Whether that counts as significant depends on how the tests are grouped, which is set out below.
 5. **ARK Innovation (ARKK) is mostly a bundle of factor bets.** It moves about 1.55 times as much as the market, tilts strongly toward growth stocks (value loading −0.64) and leans heavily toward unprofitable companies (profitability loading −1.20).
 6. **The sanity check passes.** The S&P 500 fund (SPY) should behave exactly like the market: its beta is 0.96-1.00 and its alpha under 0.5% a year in both periods. Its small negative size loading (−0.12) is expected, because the French market factor also includes small companies.
 
 ### Do the results hold up under other settings?
 
-| Setting | Significant alphas (of 72 statistical tests) |
+| Setting (correcting across all 36 tests per period) | Significant alphas (of 72 statistical tests) |
 |---|---|
 | Newey-West 3 lags, Bonferroni | 0 |
 | Newey-West 6 lags (default), Bonferroni | 0 |
@@ -104,6 +104,21 @@ All figures use Kenneth French factor data through August 2026 and are annualize
 | Newey-West 6 lags, **no correction** | 7 |
 
 The closest call is IWM's three-factor alpha, with adjusted p-values of 0.10 under both Bonferroni and Holm (for the single smallest p-value, Holm is identical to Bonferroni). Benjamini-Hochberg gives 0.065, but it controls the false discovery rate, the expected share of false positives among results called significant, a deliberately looser standard. It is reported as a check that the verdict does not depend on Bonferroni's strictness, not as evidence that IWM nearly passed. Without any correction, 7 tests look significant, which shows how easily testing many funds produces false positives.
+
+### How the verdict depends on what counts as the family of tests
+
+The table above corrects across all 36 fund-and-model tests in each period. That is conservative: the four models for one fund are nested and highly correlated, so they are not 4 independent chances of a false positive. The usual alternative is to treat one model as the primary test and correct only across the 9 funds. Doing that for each model in turn (main period, Holm correction across 9 funds):
+
+| Model treated as primary | IWM alpha | Adjusted p, 3 / 6 / 12 lags | Significant? |
+|---|---|---|---|
+| Market only (CAPM) | −4.16% | 0.44 / 0.45 / 0.16 | No |
+| Three-factor (FF3) | −1.59% | 0.019 / 0.026 / 0.052 | Yes, except at 12 lags |
+| Five-factor (FF5) | −1.21% | 0.097 / 0.096 / 0.129 | No |
+| Six-factor (FF5+MOM) | −1.42% | 0.028 / 0.033 / 0.049 | Yes, at all three lag settings |
+
+IWM is the only fund significant in any of these families, and no fund is significant in the post-2024 extension under any of them.
+
+**How to read this.** The six-factor model is the natural primary specification: it is the most complete model, and it was fixed in the code as the model for the rolling and change tests from the first commit. Under it, IWM's underperformance is significant after correcting across the 9 funds. But the result is not robust to every reasonable choice: under the five-factor model it is not significant, because the profitability and investment factors absorb part of the shortfall, and at 12 lags the six-factor result only just clears the bar (0.049). The fair summary is **moderate evidence that IWM underperformed its factor exposures, and no evidence of positive skill in any fund.**
 
 ## What the results say
 
@@ -123,13 +138,13 @@ IWM's −1.4% a year is the result that most needs explaining. These are candida
 
 ## Does it still hold? 2024–2026
 
-The main period covers January 2010 to December 2023 (168 months for established funds). The extension runs from March 2024 to August 2026, the latest month in the French library (30 months). It asks: **did the artificial-intelligence funds' alpha and exposures persist, or were their returns mostly market, growth and momentum exposure?**
+The main period covers January 2010 to December 2023 (168 months for established funds). The extension runs from March 2024 to August 2026, the latest month in the French library (30 months). January and February 2024 are left out of both periods, as set in the original study design, to keep a clean break between them. Starting the extension in January 2024 instead (32 months) changes nothing material: still no significant alpha in any of the 36 tests, and six-factor market betas move by at most 0.01 (see [`results/summary.md`](results/summary.md)). It asks: **did the artificial-intelligence funds' alpha and exposures persist, or were their returns mostly market, growth and momentum exposure?**
 
 The [rolling-exposure chart](#what-i-found) in the short version shows these shifts over time.
 
 - **The artificial-intelligence funds' recent returns came mainly from higher market exposure, not momentum.** The Global X Artificial Intelligence & Technology fund's (AIQ) market beta rose from 1.06 to 1.39, and the Global X Robotics & Artificial Intelligence fund's (BOTZ) from 1.24 to 1.41. Their momentum loadings barely changed (BOTZ +0.28, t = 1.7; AIQ +0.14, t = 0.9).
 - **No new alpha appeared.** BOTZ shows −16% a year of six-factor alpha after 2024 (t = −2.0 under the short-sample guard), but it is not significant after correction over only 30 months.
-- **Exposures do change over time.** A joint test of whether any loading changed after 2024 rejects "no change" at the 5% level for 7 of 9 funds. ARKK (p = 0.09) and BOTZ (p = 0.18) are the exceptions, partly because their samples are short and noisy.
+- **Exposures do change over time.** A joint test of whether any loading changed after 2024 rejects "no change" at the 5% level for 7 of 9 funds before correction. Correcting across the 9 funds, that becomes 6 under Holm (SPY drops out, p = 0.017) and 5 under Bonferroni (AIQ also drops out, p = 0.008, against a threshold of 0.05 / 9 ≈ 0.0056). ARKK (p = 0.09) and BOTZ (p = 0.18) are not significant even before correction, partly because their samples are short and noisy.
 
 The post-2024 data is used to re-test the findings, not to re-tune the model. With only 30 months, treat these results as indicative.
 
@@ -155,7 +170,9 @@ with smaller models dropping terms from the right. Alpha is reported annualized 
 | Holm | Same as Bonferroni | Step-down version: never less powerful, identical for the smallest p-value |
 | Benjamini-Hochberg | Expected *share* of false positives (false discovery rate) | Looser: checks that conclusions don't depend on Bonferroni's strictness |
 
-**Short-sample guard.** In samples under 60 months (the post-2024 extension), the Newey-West estimator can pick up spurious negative correlation and produce standard errors *smaller* than plain OLS. On simulated data with zero true alpha, this produced a t-statistic of 3.9 from 29 months (plain OLS: 1.85). Below 60 months, standard errors are therefore never allowed to fall below the OLS value; the unadjusted Newey-West t-statistic is kept in `regressions.csv` as `alpha_t_nw_raw`.
+Each is applied to two families of tests: all 36 fund-and-model tests in a period (the strict headline), and the 9 funds within one model (the usual primary-model test). The joint tests of changed exposures after 2024 are corrected across the 9 funds in the same way.
+
+**Short-sample guard.** In samples under 60 months (the post-2024 extension), the Newey-West estimator can pick up spurious negative correlation and produce standard errors *smaller* than plain OLS. On simulated data with zero true alpha, this produced a t-statistic of 3.9 from 29 months (plain OLS: 1.85). Below 60 months, standard errors are therefore never allowed to fall below the OLS value; the unadjusted Newey-West t-statistic is kept in `regressions.csv` as `alpha_t_nw_raw`. In the extension the guard binds for most estimates (27 of the 36 fund-and-model pairs), so many extension t-statistics are identical across 3, 6 and 12 lags in the robustness tables. That is expected, not a bug.
 
 **Rolling exposures.** The six-factor model is re-estimated over every 36-month window for each fund, from 2010 (or the fund's launch) through the latest factor month. These are point estimates only, because overlapping windows are not independent tests.
 
