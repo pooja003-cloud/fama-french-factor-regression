@@ -52,7 +52,7 @@ def main() -> None:
     lags = (config.NW_LAGS_DEFAULT, *config.NW_LAGS_ROBUSTNESS)
     print("Running CAPM / FF3 / FF5 / FF5+MOM regressions...")
     r1, s1 = models.run_period(rets, factors, config.ORIGINAL_START, config.ORIGINAL_END,
-                               config.MIN_MONTHS, "Original 2010-2023", lags)
+                               config.MIN_MONTHS, "Main period 2010-2023", lags)
     r2, s2 = models.run_period(rets, factors, config.EXTENSION_START, ext_end,
                                config.MIN_MONTHS_EXTENSION, f"Extension 2024-03 to {ext_end}", lags)
     res = models.bonferroni(pd.concat([r1, r2], ignore_index=True))
@@ -71,7 +71,7 @@ def main() -> None:
     # Figures ----------------------------------------------------------------
     periods = list(dict.fromkeys(res.period))
     for i, p in enumerate(periods):
-        tag = "original" if i == 0 else "extension"
+        tag = "main_period" if i == 0 else "extension"
         report.plot_alpha_by_model(res, p, figs / f"alpha_by_model_{tag}.png", f" ({p}){suffix}")
         report.plot_loadings_heatmap(res, p, figs / f"loadings_{tag}.png", f" ({p}){suffix}")
         report.plot_r2(res, p, figs / f"r2_{tag}.png", f" ({p}){suffix}")
@@ -90,7 +90,7 @@ def main() -> None:
     if not skipped.empty:
         md += ["Excluded from a period:\n", report._md_table(skipped), "\n"]
     for i, p in enumerate(periods):
-        tag = "original" if i == 0 else "extension"
+        tag = "main_period" if i == 0 else "extension"
         md += [f"## {p}\n", f"![alpha](figures/alpha_by_model_{tag}.png)\n",
                "### Alpha by model\n", report._md_table(report.alpha_table(res, p)), "\n",
                "### FF5 + momentum loadings, beta (t-stat)\n",
