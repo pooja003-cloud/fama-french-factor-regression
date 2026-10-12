@@ -18,11 +18,17 @@ I took 9 well-known funds: broad index funds, an actively managed fund and three
 
 ### What I found
 
-None of the 9 funds shows alpha that holds up statistically. Where a fund appeared to beat the market, most of that edge disappeared once its tilts toward growth stocks and particular company types were taken into account. The artificial-intelligence funds' returns after 2024 came mainly from moving more sharply with the overall market, not from skill.
+None of the 9 funds shows alpha that holds up statistically: 0 of 72 statistical tests survive the correction for testing many funds at once. Where a fund appeared to beat the market, most of that edge disappeared once its tilts toward growth stocks and particular company types were taken into account. The artificial-intelligence funds' returns after 2024 came mainly from moving more sharply with the overall market, not from skill.
 
 ![Annualized alpha by model](results/figures/alpha_by_model_main_period.png)
 
 _Each fund's alpha under four models, from the market alone (blue) to all six factors (yellow). Bars crossing zero mean the alpha is not statistically distinguishable from zero._
+
+![Rolling exposures](results/figures/rolling_ai_vs_market.png)
+
+_Factor loadings re-estimated over a moving 36-month window; the shaded area marks windows ending after March 2024. ARKK's and BOTZ's market betas climb toward 1.6-1.9, while the artificial-intelligence funds' momentum loadings stay near or below zero._
+
+The code is a tested Python package: 8 automated tests on simulated data run on every push.
 
 ## Original (2024) versus rebuild (2026)
 
@@ -73,7 +79,7 @@ ETF stands for exchange-traded fund. PDP is used for momentum rather than the iS
 
 All figures use Kenneth French factor data through August 2026 and are annualized. Full tables are in [`results/summary.md`](results/summary.md). Terms are defined in the [glossary](#glossary).
 
-1. **No fund earns alpha that survives the multiple-testing correction.** Across 72 tests (9 funds × 4 models × 2 periods), none is significant.
+1. **No fund earns alpha that survives the multiple-testing correction.** Across 72 statistical tests of alpha (9 funds × 4 models × 2 periods), none is significant.
 2. **Where alpha looked positive against the market alone, adding factors shrinks it.** Neither of these market-only alphas was statistically significant to begin with.
 
    | Fund | Alpha vs market only | Alpha after six factors | Main tilts (loadings) |
@@ -88,7 +94,7 @@ All figures use Kenneth French factor data through August 2026 and are annualize
 
 ### Do the results hold up under other settings?
 
-| Setting | Significant alphas (of 72 tests) |
+| Setting | Significant alphas (of 72 statistical tests) |
 |---|---|
 | Newey-West 3 lags, Bonferroni | 0 |
 | Newey-West 6 lags (default), Bonferroni | 0 |
@@ -97,7 +103,7 @@ All figures use Kenneth French factor data through August 2026 and are annualize
 | Newey-West 6 lags, Benjamini-Hochberg (looser) | 0 |
 | Newey-West 6 lags, **no correction** | 7 |
 
-The closest call is IWM's three-factor alpha, with adjusted p-values of 0.10 (Bonferroni), 0.10 (Holm) and 0.065 (Benjamini-Hochberg). Holm cannot help here, because for the single smallest p-value it is identical to Bonferroni. Without any correction, 7 tests look significant, which shows how easily testing many funds produces false positives.
+The closest call is IWM's three-factor alpha, with adjusted p-values of 0.10 under both Bonferroni and Holm (for the single smallest p-value, Holm is identical to Bonferroni). Benjamini-Hochberg gives 0.065, but it controls the false discovery rate, the expected share of false positives among results called significant, a deliberately looser standard. It is reported as a check that the verdict does not depend on Bonferroni's strictness, not as evidence that IWM nearly passed. Without any correction, 7 tests look significant, which shows how easily testing many funds produces false positives.
 
 ## What the results say
 
@@ -119,9 +125,7 @@ IWM's −1.4% a year is the result that most needs explaining. These are candida
 
 The main period covers January 2010 to December 2023 (168 months for established funds). The extension runs from March 2024 to August 2026, the latest month in the French library (30 months). It asks: **did the artificial-intelligence funds' alpha and exposures persist, or were their returns mostly market, growth and momentum exposure?**
 
-![Rolling exposures](results/figures/rolling_ai_vs_market.png)
-
-_Factor loadings re-estimated over a moving 36-month window; the shaded area marks windows ending after March 2024. ARKK's and BOTZ's market betas climb toward 1.6-1.9, while the artificial-intelligence funds' momentum loadings stay near or below zero._
+The [rolling-exposure chart](#what-i-found) in the short version shows these shifts over time.
 
 - **The artificial-intelligence funds' recent returns came mainly from higher market exposure, not momentum.** The Global X Artificial Intelligence & Technology fund's (AIQ) market beta rose from 1.06 to 1.39, and the Global X Robotics & Artificial Intelligence fund's (BOTZ) from 1.24 to 1.41. Their momentum loadings barely changed (BOTZ +0.28, t = 1.7; AIQ +0.14, t = 0.9).
 - **No new alpha appeared.** BOTZ shows −16% a year of six-factor alpha after 2024 (t = −2.0 under the short-sample guard), but it is not significant after correction over only 30 months.
@@ -177,7 +181,7 @@ cd fama-french-factor-regression
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python -m pytest -q                 # 8 offline tests on simulated data
+python -m pytest -q                 # 8 automated tests, offline, on simulated data
 python run.py --demo --no-llm       # whole pipeline on simulated data -> results_demo/
 python run.py                       # real data -> results/
 python run.py --refresh             # re-download factors and prices
@@ -186,7 +190,7 @@ export ANTHROPIC_API_KEY=...        # optional, for LLM-written summaries
 
 Downloads are cached in `data/raw/`. The French library is revised occasionally, so note the download date when quoting numbers.
 
-**Validation.** The test suite simulates factor returns and funds with **known** alphas and loadings (including a momentum shift after 2024 for the artificial-intelligence funds) and checks that the pipeline recovers them. It also checks that a fund built to match the market gives beta ≈ 1 and alpha ≈ 0, that a fund's partial launch month is excluded, that the Bonferroni, Holm and Benjamini-Hochberg adjustments are applied correctly, and that the French data parser handles the file layout. **8 tests run in continuous integration** (GitHub Actions), together with the full demo pipeline, on every push.
+**Validation.** The test suite simulates factor returns and funds with **known** alphas and loadings (including a momentum shift after 2024 for the artificial-intelligence funds) and checks that the pipeline recovers them. It also checks that a fund built to match the market gives beta ≈ 1 and alpha ≈ 0, that a fund's partial launch month is excluded, that the Bonferroni, Holm and Benjamini-Hochberg adjustments are applied correctly, and that the French data parser handles the file layout. **8 automated tests run in continuous integration** (GitHub Actions), together with the full demo pipeline, on every push.
 
 ### Outputs
 
