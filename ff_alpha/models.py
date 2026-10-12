@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from scipy import stats
+from statsmodels.stats.multitest import multipletests
 
 from . import config
 from .data import fund_sample
@@ -93,6 +94,18 @@ def bonferroni(results: pd.DataFrame, alpha_level: float = config.SIGNIFICANCE) 
     out["alpha_p_bonf"] = (out["alpha_p"] * m).clip(upper=1.0)
     out["sig_raw"] = out["alpha_p"] < alpha_level
     out["sig_bonf"] = out["alpha_p_bonf"] < alpha_level
+
+    # Holm (step-down; controls the same family-wise error rate as Bonferroni
+    # but is never less powerful) and Benjamini-Hochberg (controls the false
+    # discovery rate instead: a looser, complementary standard).
+    out["alpha_p_holm"] = np.nan
+    out["alpha_p_bh"] = np.nan
+    for _, idx in out.groupby(["period", "nw_lags"]).groups.items():
+        p = out.loc[idx, "alpha_p"].to_numpy()
+        out.loc[idx, "alpha_p_holm"] = multipletests(p, method="holm")[1]
+        out.loc[idx, "alpha_p_bh"] = multipletests(p, method="fdr_bh")[1]
+    out["sig_holm"] = out["alpha_p_holm"] < alpha_level
+    out["sig_bh"] = out["alpha_p_bh"] < alpha_level
     return out
 
 

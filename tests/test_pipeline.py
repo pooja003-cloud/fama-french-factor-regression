@@ -46,6 +46,11 @@ def test_bonferroni():
     assert list(out.alpha_p_bonf) == pytest.approx([0.004, 0.08, 1.0, 1.0])
     assert list(out.sig_bonf) == [True, False, False, False]
     assert list(out.sig_raw) == [True, True, False, False]
+    # Holm: sorted p x (m, m-1, ...), made monotone -> never above Bonferroni
+    assert list(out.alpha_p_holm) == pytest.approx([0.004, 0.06, 0.6, 0.9])
+    assert (out.alpha_p_holm <= out.alpha_p_bonf + 1e-12).all()
+    # Benjamini-Hochberg: p x m / rank, made monotone
+    assert list(out.alpha_p_bh) == pytest.approx([0.004, 0.04, 0.4, 0.9])
 
 
 def test_structural_change_detects_momentum_shift(synth):
