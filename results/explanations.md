@@ -5,88 +5,84 @@ _Written by: Claude Code (sonnet); model: claude-sonnet-5-5. 9 of 9 summaries ca
 
 ## SPY: SPDR S&P 500 ETF
 
-SPY, the fund tracking the S&P 500 index, shows no evidence of manager skill. Skill here means "alpha," the return left over after accounting for the risks the fund takes. After correcting for the many tests run, no alpha was statistically distinguishable from zero, and none passed even within a single model's nine funds. In the market-only model, alpha was 0.39% per year. It shrank to 0.05 with size and value factors added, then turned slightly negative at -0.18 in the larger model. So the small apparent edge was really exposure to common return drivers.
+SPY, a fund that simply tracks the S&P 500, shows no reliable alpha in any of the four models for 2010 to 2023. Alpha is the return left over after accounting for the fund's exposure to broad market drivers, and for an index fund it reflects how the index performed relative to those exposures, not anyone's skill. The market-only estimate was 0.39% per year, but it shrank to 0.05% with size and value added, then turned slightly negative at -0.18% in the larger model. So the small positive figure came from common factor exposures, and none of these estimates differs meaningfully from zero.
 
-The biggest exposure is the overall market: a beta of 0.99 means the fund moves almost one-for-one with stocks generally. Second, a size loading of -0.12 shows a mild tilt toward large companies over small ones. Third, a profitability loading of 0.06 shows a faint lean toward firms with strong profits. It shows essentially no tilt toward recent winners.
+The key exposure is the market, with a beta (sensitivity) of 0.99, so SPY moves almost one-for-one with stocks overall. It also leans toward large companies, with a size loading of -0.12, and slightly toward highly profitable firms, at 0.06. Momentum is essentially absent.
 
-After March 2024, the picture looks much the same. The alpha change was negligible, and the loadings did not significantly change after correction. Only 30 months of data make that comparison uncertain.
+After 2024, the alpha change had a t-statistic of just 0.12, and the loadings did not significantly shift after correction. Only 30 months of data make this comparison uncertain.
 
 _Source: language model, numbers checked._
 
 ## IWM: iShares Russell 2000 ETF
 
-IWM, a fund holding small U.S. companies, shows no convincing evidence of skill. After correcting for the many tests run across all funds and models, no model finds a reliable alpha (return left over after accounting for common drivers of returns). There is moderate evidence of a negative alpha in two models, the three-factor model and the five-factor-plus-momentum model, with roughly -1.6 and -1.4 percentage points per year. The market-only model showed -4.16, but that shrinks in the larger models, so much of the apparent shortfall came from exposure to common factors rather than stock picking.
-
-The fund moves about one-for-one with the overall market and behaves strongly like a bet on small companies (size loading about 0.83). It also leans slightly toward stocks priced low relative to their accounting value and toward less profitable firms.
-
-After 2024, the 30-month sample shows alpha still negative, about -3.65 in the fullest model. The change is not statistically distinguishable from before (t-stat -1.36). The factor loadings did change significantly, mainly a stronger tilt toward stocks priced low relative to their accounting value (up 0.19), though the short sample makes this uncertain.
+There is moderate evidence that IWM underperformed, in the Fama-French three-factor model and the five-factor-plus-momentum model, but this does not survive the strictest correction for running many tests at once. Alpha is the return left over after accounting for the fund's exposure to common drivers of returns. Because IWM is an index fund, its alpha reflects how the Russell 2000 index performed relative to those exposures, not manager skill. The market-only (CAPM) model showed alpha of -4.16% a year, but in the larger models it shrinks to between -1.2% and -1.6%. Much of what looked like weakness was really exposure to common factors. The biggest exposure is size: IWM behaves like a bet on small companies (0.86 in the three-factor model). It also moves roughly one-for-one with the overall market and leans slightly toward less profitable firms (-0.1). After 2024, alpha was more negative, but the change is statistically unclear (t-stat -1.36), and 30 months is a short sample. The factor loadings did change significantly, mainly a rise in the tilt toward stocks priced low relative to their accounting value, from 0.1 to about 0.3.
 
 _Source: language model, numbers checked._
 
 ## IWD: iShares Russell 1000 Value ETF
 
-IWD, the iShares Russell 1000 Value ETF, shows no evidence of skill or lack of it. Its alpha (return beyond what common risk factors explain) was slightly negative in every model for 2010-2023, about -1.77% a year in the market-only model and -1.36% in the fullest one, and none was significant after correcting for all 36 tests run. The fund mainly behaves like the overall market, with a market sensitivity of 0.93, plus a clear tilt toward value stocks, meaning those priced low relative to their accounting value (loading 0.26). It also has a small tilt toward companies that invest conservatively (0.14). Because these factors explain so much, the market-only alpha moved a little but never became meaningful.
+IWD is an index fund of large U.S. companies priced low relative to their accounting value. It shows no reliable evidence of alpha, meaning return beyond what its exposures to common market drivers (called factors) would predict. From 2010 to 2023 its estimated alpha was negative, about -1.77% a year in the market-only model and between -1.17% and -1.52% in the richer models. None of these survived statistical correction for running many tests. Because this is an index fund, the figure describes how the index performed relative to its exposures, not manager skill. The estimate shrank somewhat once other factors were included, so part of it reflected common exposures.
 
-After 2024, the 30-month sample is short, so comparisons are uncertain. The alpha barely changed (change t-stat 0.02), and it remained insignificant. The factor loadings did change significantly after correction, mainly a stronger value tilt, rising by 0.31.
+Three exposures matter most. The fund moves almost one-for-one with the overall market (loading about 0.93). It tilts toward value stocks (0.33 in the three-factor model). It behaves like a bet on large companies, since its small-company exposure is near zero (-0.03).
+
+After 2024, alpha barely changed (0.05 points a year). The value tilt grew stronger, reaching 0.64 in the three-factor model, and the loadings changed significantly even after correction. The sample is only 30 months, so this comparison is uncertain.
 
 _Source: language model, numbers checked._
 
 ## IWF: iShares Russell 1000 Growth ETF
 
-The iShares Russell 1000 Growth ETF (IWF) shows no evidence of investment skill. Alpha, the return left over after accounting for market and style effects, was not statistically significant in any model, even before the strict correction for running many tests at once. In the market-only model, alpha was about 1.7% per year. In the larger models it shrank to roughly 0.8%, so the apparent outperformance mostly reflected exposure to common factors rather than skill.
+IWF, an index fund tracking large growth companies, shows no statistically reliable alpha, meaning return beyond what its exposures to common factors would predict. This holds even under the strictest correction for running many tests. In the market-only model, alpha was 1.71% a year, but it shrank to about 0.75% once size, value, profitability, investment and momentum were added. That small figure is simply how the index performed relative to its exposures, and it is too uncertain to count as meaningful.
 
-The clearest exposure is a strong lean away from value stocks, meaning those priced low relative to their accounting value. IWF behaves like a bet on growth companies. It also tilts toward big companies rather than small ones, and its market sensitivity (beta) is about 1.06, so it moves slightly more than the overall market. It also leans mildly toward firms that invest aggressively.
+Three exposures matter most. The fund has a market beta (sensitivity to overall stock market moves) of about 1.06, so it moves slightly more than the market. Its value loading is negative, about -0.21, so it behaves like a bet on stocks priced high relative to their accounting value, which is what growth means. Its size loading of about -0.12 shows a lean toward big companies over small ones.
 
-After 2024, alpha turned slightly lower, but the change was tiny and statistically indistinguishable from zero. The factor loadings did change significantly, mainly through a stronger tilt away from value. With only 30 months of data, that comparison is uncertain.
+From 2024-03 onward, alpha stayed statistically indistinguishable from zero, with a change of -0.36 points and a t-stat of -0.15. The factor loadings did change significantly, with the growth tilt deepening to about -0.46. The sample is only 30 months, so this comparison is uncertain.
 
 _Source: language model, numbers checked._
 
 ## PDP: Invesco Dorsey Wright Momentum ETF
 
-PDP is a fund that buys stocks that have recently been rising. The analysis asks whether it earned anything beyond what its exposure to common market drivers (called factors) would predict. That leftover is called alpha. For 2010 to 2023, alpha was negative in every model, about -1.97% a year in the fullest one. After correcting for the many tests run, none of this is statistically distinguishable from zero, so there is no evidence of skill or of its absence.
+Over 2010-2023, there is no reliable evidence that Invesco Dorsey Wright Momentum ETF (PDP) beat or lagged what its exposures predict. Its alpha, the return left over after accounting for common drivers of stock returns, ranged from -0.81 to -1.97 percentage points a year across the four models. None was statistically distinguishable from zero, even before the strictest correction for running many tests. Because PDP is an index fund, this describes how its index performed relative to its factor exposures, not manager skill.
 
-The fund moves almost one-for-one with the overall market (a market exposure of 0.99 to 1.03). It leans strongly toward recent winners, with a momentum loading of 0.27. It also tilts away from stocks priced low relative to their accounting value, with a value loading of -0.1, and slightly toward smaller companies.
+The main exposures are as follows. It moves almost one-for-one with the overall market (a beta of about 0.99). Once momentum is included, it clearly leans toward recent winners (0.27). It also tilts away from stocks priced low relative to their accounting value (-0.1 to -0.23).
 
-From March 2024 to August 2026, only 30 months, alpha was more negative, at -5.57% a year. The change from the earlier period was not statistically meaningful. The factor exposures did change significantly, with momentum rising to 0.6. The short sample makes this comparison uncertain.
+After 2024, over just 30 months, the alpha estimate fell by 3.59 points a year. The t-statistic of -1.18 says that is not a clear change. The factor loadings did change significantly, however, with the momentum lean rising to 0.6. The short sample makes this comparison uncertain.
 
 _Source: language model, numbers checked._
 
 ## FCNTX: Fidelity Contrafund (active)
 
-Fidelity Contrafund shows no statistical evidence of manager skill. In the 2010-2023 period, its "alpha" (return beyond what its risks explain) was not significant in any of the four models, even after correcting for the many tests run. That also holds when each model is judged among the nine funds. The simple market-only estimate of 1.38% a year shrank to 0.54% once size, value, and momentum were added, and 0.55% in the fullest model. So the apparent edge mostly reflected exposure to common factors, and it was never distinguishable from zero.
+Fidelity Contrafund, an actively managed large-growth fund, shows no reliable evidence of alpha (return beyond what its exposures to common market factors would predict). In 2010-2023 the simple market-only estimate was 1.38% a year, but it shrank to 0.55% once the fuller models were used, and none of the estimates survived the strict correction for running many tests. The apparent edge mostly reflected the fund's factor exposures. Three of these matter most. It moves almost one-for-one with the overall market (beta 0.98). It leans toward large companies, and toward growth stocks, meaning stocks priced high relative to their accounting value. It also tilts toward firms that invest aggressively, with a slight lean toward recent winners.
 
-Three exposures matter most. The fund moves almost one-for-one with the overall market (about 0.98). It leans toward growth stocks, which are priced high relative to their accounting value (value loading -0.24 in one model). It also tilts toward large companies and, more modestly, toward firms that invest aggressively.
-
-After 2024, alpha rose by 1.67 points a year, but its t-statistic of 0.89 means that change is not reliable. The factor loadings did change significantly after correction, notably the investment tilt, which turned from negative to positive. With only 30 months, that comparison remains uncertain.
+After 2024 the picture is mixed, though only 30 months of data make comparisons uncertain. Alpha rose to 2.22% a year in the fullest model, but the change of 1.67 points has a t-statistic of 0.89, which is well within chance. The factor loadings did change significantly, mainly the investment tilt, which moved from -0.24 to 0.21.
 
 _Source: language model, numbers checked._
 
 ## ARKK: ARK Innovation ETF (active)
 
-ARK Innovation ETF shows no evidence of investing skill. After correcting for the many comparisons run, none of the 36 tests is significant, and no single model reaches significance even among its own nine funds. Alpha, the return left over after accounting for common drivers, was -2.58% a year against the market alone, then -1.35%, 3.76% and 4.2% as more factors were added. Its sign changed, which suggests the early picture mostly reflected exposure to common factors, and every version is statistically indistinguishable from zero.
+ARK Innovation ETF, an actively managed fund, shows no statistically reliable alpha, meaning no return beyond what its exposure to common market drivers (called factors) would predict. This holds in all four models for 2014-2023, even after correcting for the many tests run. Using only the market as a yardstick, the fund looked like it lagged by about 2.6% a year. In the richer models the sign flipped to roughly 3.8% to 4.2% a year. Neither figure is distinguishable from zero, so the apparent weakness mostly reflected factor exposure rather than manager skill or its absence.
 
-The fund's behavior is clearer. It amplifies the market, with a beta (sensitivity) of about 1.5 to 1.7. It behaves like a bet on small companies, and leans strongly away from value stocks, which are priced low relative to their accounting value, favoring expensive growth names. It also tilts toward firms with weak profitability.
+Three exposures matter most. First, the fund amplifies market swings, with a market beta (sensitivity) of about 1.5 to 1.7. Second, it behaves like a bet on small companies. Third, it leans toward growth stocks, which are priced high relative to their accounting value, and toward firms with weak profitability.
 
-After 2024, over just 30 months, the pattern looked similar. The alpha change was small (t-stat 0.19), and loadings did not significantly change after correction. The short sample makes this comparison uncertain.
+After 2024, the alpha estimate barely changed, and that change was statistically negligible. The factor loadings did not change significantly after correction, though the 30-month sample is short, so this comparison is uncertain.
 
 _Source: language model, numbers checked._
 
 ## BOTZ: Global X Robotics & AI ETF
 
-The Global X Robotics & AI ETF (BOTZ) shows no reliable evidence of investment skill. Skill is measured by "alpha," the return left over after accounting for the fund's exposure to broad market patterns. In 2016-2023, alpha was negative in every model, from -4.99% a year in the market-only model to about -2.4% in the richest one. None of these was statistically significant, even before the stricter correction for running many tests. The shrinkage suggests the apparent shortfall partly reflected common factor exposures rather than manager choices.
+BOTZ, an index fund tracking AI and robotics companies, shows no reliable alpha, meaning no return beyond what its exposures to common market drivers (called factors) would predict. In the 2016-2023 sample, the market-only estimate was -4.99% per year, shrinking to -2.44% once all factors were included, and none of these results was statistically meaningful after correction. So the index's modest shortfall mostly reflected how it was exposed to those factors rather than anything separate.
 
-The fund's biggest trait is high market sensitivity: a beta of about 1.25 means it tends to move more than the overall stock market. It also leans toward growth stocks, meaning companies not priced low relative to their accounting value (value loading -0.35 in the three-factor model). In the larger models it tilts toward firms with weaker profitability (about -0.4).
+The largest exposure is to the overall stock market: a beta (sensitivity) of about 1.24, so the fund tends to move more than the market. It also leans away from priced-low-relative-to-accounting-value stocks in the simpler model (-0.35), behaving like a growth bet. It tilts slightly away from firms with strong profitability (-0.42).
 
-After March 2024, alpha looked worse, around -16% to -17% a year. The change of -13.68 has a t-statistic of -1.56, which is not convincing, and 30 months is a short sample. The factor exposures did not change significantly.
+After 2024, the estimated alpha fell to about -16 to -17% per year, but the change had a t-statistic of -1.56, too weak to be confident about. With only 30 months, the comparison is uncertain. The loadings did not significantly change.
 
 _Source: language model, numbers checked._
 
 ## AIQ: Global X Artificial Intelligence & Technology ETF
 
-AIQ is an exchange-traded fund holding artificial intelligence and technology companies. The data show no evidence of skill. Alpha, the return left over after accounting for broad market forces, was 1.8% a year in the market-only model and 3.6% in the richest model. After correcting for running 36 tests, none of these is distinguishable from luck, and none is significant even among the nine funds within each model.
+AIQ is an index fund focused on artificial intelligence and technology companies. From mid-2018 to 2023, its alpha (return left over after accounting for common market drivers) was 1.84% per year using the market-only model and 3.64% with the fullest model. Neither is statistically distinguishable from zero, even before the strictest corrections, so there is no reliable evidence of alpha. Because this is an index fund, that figure only describes how the index performed relative to its exposures, not any manager's skill.
 
-The fund's main trait is high market sensitivity. Its beta, a measure of how strongly it moves with the overall stock market, was about 1.1, so it tends to swing a bit more than the market. It also has a negative value loading, meaning it behaves like the opposite of stocks priced low relative to their accounting value: a growth-oriented tilt. Its small-company tilt was mild and faded in the larger models.
+Three exposures matter most. First, the fund moves slightly more than the overall market (a market beta of about 1.1). Second, it leans toward stocks priced high relative to their accounting value, a growth-style tilt (about -0.3). Third, it holds a little less in highly profitable firms than the typical stock, a tilt that becomes much stronger later.
 
-After 2024, alpha barely changed, down 2.1 points with a t-statistic of -0.46, which is noise. The factor loadings did change significantly after correction: market sensitivity rose, and the fund leaned toward large companies and less profitable firms. With only 30 months of data, that comparison is uncertain.
+After 2024, the alpha estimate fell by 2.12 points per year, but with a t-statistic of -0.46 that change is negligible. The factor loadings did change significantly: market sensitivity rose to about 1.4, and the profitability tilt deepened to about -0.8. The 30-month sample is short, so the comparison is uncertain.
 
 _Source: language model, numbers checked._

@@ -199,11 +199,11 @@ Two safeguards make the summaries trustworthy:
 
 **Sample output (ARKK)**, written by Claude Sonnet 5.5 through Claude Code with `python run.py --llm claude_code`. It is copied unedited from [`results/explanations.md`](results/explanations.md), which has all nine funds:
 
-> ARK Innovation ETF shows no evidence of investing skill. After correcting for the many comparisons run, none of the 36 tests is significant, and no single model reaches significance even among its own nine funds. Alpha, the return left over after accounting for common drivers, was -2.58% a year against the market alone, then -1.35%, 3.76% and 4.2% as more factors were added. Its sign changed, which suggests the early picture mostly reflected exposure to common factors, and every version is statistically indistinguishable from zero.
+> ARK Innovation ETF, an actively managed fund, shows no statistically reliable alpha, meaning no return beyond what its exposure to common market drivers (called factors) would predict. This holds in all four models for 2014-2023, even after correcting for the many tests run. Using only the market as a yardstick, the fund looked like it lagged by about 2.6% a year. In the richer models the sign flipped to roughly 3.8% to 4.2% a year. Neither figure is distinguishable from zero, so the apparent weakness mostly reflected factor exposure rather than manager skill or its absence.
 >
-> The fund's behavior is clearer. It amplifies the market, with a beta (sensitivity) of about 1.5 to 1.7. It behaves like a bet on small companies, and leans strongly away from value stocks, which are priced low relative to their accounting value, favoring expensive growth names. It also tilts toward firms with weak profitability.
+> Three exposures matter most. First, the fund amplifies market swings, with a market beta (sensitivity) of about 1.5 to 1.7. Second, it behaves like a bet on small companies. Third, it leans toward growth stocks, which are priced high relative to their accounting value, and toward firms with weak profitability.
 >
-> After 2024, over just 30 months, the pattern looked similar. The alpha change was small (t-stat 0.19), and loadings did not significantly change after correction. The short sample makes this comparison uncertain.
+> After 2024, the alpha estimate barely changed, and that change was statistically negligible. The factor loadings did not change significantly after correction, though the 30-month sample is short, so this comparison is uncertain.
 
 The number check confirms that every figure comes from the results; it cannot confirm that each figure is described correctly, so the summaries were also read against `results/regressions.csv` before committing.
 
