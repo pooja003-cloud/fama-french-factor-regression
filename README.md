@@ -28,7 +28,7 @@ _Each fund's alpha under four models, from the market alone (blue) to all six fa
 
 _Factor loadings re-estimated over a moving 36-month window; the shaded area marks windows ending after March 2024. ARKK's and BOTZ's market betas climb toward 1.6-1.9, while the artificial-intelligence funds' momentum loadings stay near or below zero._
 
-The code is a tested Python package: 8 automated tests on simulated data run on every push.
+The code is a tested Python package: 11 automated tests on simulated data run on every push.
 
 ## Original (2024) versus rebuild (2026)
 
@@ -184,11 +184,28 @@ $$
 
 $\delta$ is the change in alpha, each element of $\gamma$ the change in a loading, and a joint Wald test checks whether any loading changed.
 
-**Written fund summaries.** [`ff_alpha/explain.py`](ff_alpha/explain.py) sends each fund's computed numbers to a large language model (LLM) with instructions to use only those numbers, explain the two or three exposures that matter in everyday terms, and treat the corrected result as the final verdict. Set `ANTHROPIC_API_KEY` to enable it (model configurable with `FF_LLM_MODEL`). Without a key, a fixed template writes the summaries, so the pipeline always completes.
+**Written fund summaries.** [`ff_alpha/explain.py`](ff_alpha/explain.py) sends each fund's computed numbers (as JSON) to a large language model (LLM) with instructions to use only those numbers, explain the two or three exposures that matter in everyday terms, and use the corrected significance results as the verdict. It uses the same Claude Code setup as my [LLM earnings-signal project](https://github.com/pooja003-cloud/llm-earnings-signal), so no paid API key is needed:
 
-The project's own runs used the built-in template, because the LLM step needs a paid API key. The sample below for ARKK was generated with Claude (claude.ai) using the same instructions and ARKK's computed numbers from `results/regressions.csv`:
+| Option | What you need | Cost |
+|---|---|---|
+| `--llm claude_code` | [Claude Code](https://code.claude.com), signed in with a Claude Pro or Max subscription | Included in the subscription; uses its normal usage limits |
+| `--llm anthropic` | A key for Anthropic's paid programming interface (`ANTHROPIC_API_KEY`) | Pay per use (optional, not needed) |
+| `--llm template` (default) | Nothing | Free; a fixed template, no language model |
 
-> ARKK is best understood as a magnified bet on one kind of company rather than a source of independent skill. From November 2014 to December 2023 (110 months), it moved about 1.5 to 1.7 times as much as the overall stock market, so a 10% market rise typically meant a 15-17% move for ARKK, in either direction. On top of that, it leaned toward smaller, expensive "growth" companies and, most strongly, toward unprofitable ones (a profitability loading of −1.20). Against the market alone its alpha was −2.58% a year; after accounting for these tilts it was +4.20% a year. Neither figure is statistically reliable (t = −0.26 and 0.88), and neither survives the correction for testing many funds, so the honest verdict is no detectable alpha. The factors explain about 82% of its monthly ups and downs. In the 30 months after March 2024 the picture is similar: an even stronger growth tilt (−1.37) and still no reliable alpha, though a sample this short makes the comparison uncertain.
+Two safeguards make the summaries trustworthy:
+
+- **Every number is checked.** Each number in the model's text is compared with the computed results (allowing only rounding). A summary with a number that isn't in the data is sent back once with the problem listed; if it fails again, the fixed template is used instead. The outcome for each fund is saved in `results/explanations_check.json`.
+- **No accidental API billing.** With `claude_code`, `ANTHROPIC_API_KEY` is removed from Claude Code's environment, so the call can only use the subscription.
+
+**Sample output (ARKK)**, written by Claude Sonnet 5.5 through Claude Code with `python run.py --llm claude_code`. It is copied unedited from [`results/explanations.md`](results/explanations.md), which has all nine funds:
+
+> ARK Innovation ETF shows no evidence of investing skill. After correcting for the many comparisons run, none of the 36 tests is significant, and no single model reaches significance even among its own nine funds. Alpha, the return left over after accounting for common drivers, was -2.58% a year against the market alone, then -1.35%, 3.76% and 4.2% as more factors were added. Its sign changed, which suggests the early picture mostly reflected exposure to common factors, and every version is statistically indistinguishable from zero.
+>
+> The fund's behavior is clearer. It amplifies the market, with a beta (sensitivity) of about 1.5 to 1.7. It behaves like a bet on small companies, and leans strongly away from value stocks, which are priced low relative to their accounting value, favoring expensive growth names. It also tilts toward firms with weak profitability.
+>
+> After 2024, over just 30 months, the pattern looked similar. The alpha change was small (t-stat 0.19), and loadings did not significantly change after correction. The short sample makes this comparison uncertain.
+
+The number check confirms that every figure comes from the results; it cannot confirm that each figure is described correctly, so the summaries were also read against `results/regressions.csv` before committing.
 
 ## Running it
 
@@ -198,16 +215,16 @@ cd fama-french-factor-regression
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python -m pytest -q                 # 8 automated tests, offline, on simulated data
+python -m pytest -q                 # 11 automated tests, offline, on simulated data
 python run.py --demo --no-llm       # whole pipeline on simulated data -> results_demo/
 python run.py                       # real data -> results/
 python run.py --refresh             # re-download factors and prices
-export ANTHROPIC_API_KEY=...        # optional, for LLM-written summaries
+python run.py --llm claude_code     # fund summaries via Claude Code (Pro plan, no API key)
 ```
 
 Downloads are cached in `data/raw/`. The French library is revised occasionally, so note the download date when quoting numbers.
 
-**Validation.** The test suite simulates factor returns and funds with **known** alphas and loadings (including a momentum shift after 2024 for the artificial-intelligence funds) and checks that the pipeline recovers them. It also checks that a fund built to match the market gives beta ≈ 1 and alpha ≈ 0, that a fund's partial launch month is excluded, that the Bonferroni, Holm and Benjamini-Hochberg adjustments are applied correctly, and that the French data parser handles the file layout. **8 automated tests run in continuous integration** (GitHub Actions), together with the full demo pipeline, on every push.
+**Validation.** The test suite simulates factor returns and funds with **known** alphas and loadings (including a momentum shift after 2024 for the artificial-intelligence funds) and checks that the pipeline recovers them. It also checks that a fund built to match the market gives beta ≈ 1 and alpha ≈ 0, that a fund's partial launch month is excluded, that the Bonferroni, Holm and Benjamini-Hochberg adjustments are applied correctly, that the French data parser handles the file layout, and that the fund summaries' number check catches invented figures and never passes an API key to Claude Code. **11 automated tests run in continuous integration** (GitHub Actions), together with the full demo pipeline, on every push.
 
 ### Outputs
 
@@ -229,7 +246,7 @@ ff_alpha/
   models.py    regressions, multiple-testing corrections, post-2024 change test
   rolling.py   rolling 36-month regressions
   report.py    tables and figures
-  explain.py   LLM-written fund summaries
+  explain.py   LLM-written fund summaries (Claude Code, API or template) with a number check
 run.py         runs the full study
 tests/         offline tests on simulated data
 ```

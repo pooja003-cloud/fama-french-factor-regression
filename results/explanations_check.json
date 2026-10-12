@@ -1,0 +1,50 @@
+{
+  "source": "Claude Code (sonnet); model: claude-sonnet-5-5",
+  "funds": [
+    {
+      "ticker": "SPY",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "IWM",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "IWD",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "IWF",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "PDP",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "FCNTX",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "ARKK",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "BOTZ",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    },
+    {
+      "ticker": "AIQ",
+      "written_by": "language model, numbers checked",
+      "unsupported_numbers": []
+    }
+  ]
+}

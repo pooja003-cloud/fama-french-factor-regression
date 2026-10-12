@@ -1,76 +1,92 @@
-# Plain-English results
+# Fund summaries
 
-_Written by: template. Every number comes from `results/regressions.csv`; check there before quoting._
+_Written by: Claude Code (sonnet); model: claude-sonnet-5-5. 9 of 9 summaries came from the language model; every number in them was checked against `results/regressions.csv`, and any summary that failed the check was replaced by the fixed template._
 
 
 ## SPY: SPDR S&P 500 ETF
 
-**Main period 2010-2023 (2010-01 to 2023-12, 168 months).** Measured against the market alone, SPY earned +0.39% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -0.17% a year (t = -1.01), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 0.99 and its largest style tilts are size (-0.12), profitability (+0.06). Together the factors explain 100% of its month-to-month returns.
+SPY, the fund tracking the S&P 500 index, shows no evidence of manager skill. Skill here means "alpha," the return left over after accounting for the risks the fund takes. After correcting for the many tests run, no alpha was statistically distinguishable from zero, and none passed even within a single model's nine funds. In the market-only model, alpha was 0.39% per year. It shrank to 0.05 with size and value factors added, then turned slightly negative at -0.18 in the larger model. So the small apparent edge was really exposure to common return drivers.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, SPY earned +0.46% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -0.13% a year (t = -0.19), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.00 and its largest style tilts are size (-0.08), value (+0.03). Together the factors explain 100% of its month-to-month returns.
+The biggest exposure is the overall market: a beta of 0.99 means the fund moves almost one-for-one with stocks generally. Second, a size loading of -0.12 shows a mild tilt toward large companies over small ones. Third, a profitability loading of 0.06 shows a faint lean toward firms with strong profits. It shows essentially no tilt toward recent winners.
 
-**After 2024.** Alpha changed by +0.05% a year (t = 0.12); a joint test that all loadings stayed the same gives p = 0.017. The post-2024 sample is short, so treat this comparison as tentative.
+After March 2024, the picture looks much the same. The alpha change was negligible, and the loadings did not significantly change after correction. Only 30 months of data make that comparison uncertain.
+
+_Source: language model, numbers checked._
 
 ## IWM: iShares Russell 2000 ETF
 
-**Main period 2010-2023 (2010-01 to 2023-12, 168 months).** Measured against the market alone, IWM earned -4.16% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -1.42% a year (t = -2.95), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.01 and its largest style tilts are size (+0.83), value (+0.10). Together the factors explain 99% of its month-to-month returns.
+IWM, a fund holding small U.S. companies, shows no convincing evidence of skill. After correcting for the many tests run across all funds and models, no model finds a reliable alpha (return left over after accounting for common drivers of returns). There is moderate evidence of a negative alpha in two models, the three-factor model and the five-factor-plus-momentum model, with roughly -1.6 and -1.4 percentage points per year. The market-only model showed -4.16, but that shrinks in the larger models, so much of the apparent shortfall came from exposure to common factors rather than stock picking.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, IWM earned -3.86% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -3.65% a year (t = -2.11), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.11 and its largest style tilts are size (+0.80), value (+0.29). Together the factors explain 99% of its month-to-month returns.
+The fund moves about one-for-one with the overall market and behaves strongly like a bet on small companies (size loading about 0.83). It also leans slightly toward stocks priced low relative to their accounting value and toward less profitable firms.
 
-**After 2024.** Alpha changed by -2.23% a year (t = -1.36); a joint test that all loadings stayed the same gives p = 0.000. The post-2024 sample is short, so treat this comparison as tentative.
+After 2024, the 30-month sample shows alpha still negative, about -3.65 in the fullest model. The change is not statistically distinguishable from before (t-stat -1.36). The factor loadings did change significantly, mainly a stronger tilt toward stocks priced low relative to their accounting value (up 0.19), though the short sample makes this uncertain.
+
+_Source: language model, numbers checked._
 
 ## IWD: iShares Russell 1000 Value ETF
 
-**Main period 2010-2023 (2010-01 to 2023-12, 168 months).** Measured against the market alone, IWD earned -1.77% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -1.36% a year (t = -1.85), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 0.93 and its largest style tilts are value (+0.26), investment (+0.14). Together the factors explain 97% of its month-to-month returns.
+IWD, the iShares Russell 1000 Value ETF, shows no evidence of skill or lack of it. Its alpha (return beyond what common risk factors explain) was slightly negative in every model for 2010-2023, about -1.77% a year in the market-only model and -1.36% in the fullest one, and none was significant after correcting for all 36 tests run. The fund mainly behaves like the overall market, with a market sensitivity of 0.93, plus a clear tilt toward value stocks, meaning those priced low relative to their accounting value (loading 0.26). It also has a small tilt toward companies that invest conservatively (0.14). Because these factors explain so much, the market-only alpha moved a little but never became meaningful.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, IWD earned +4.15% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -1.31% a year (t = -0.40), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 0.96 and its largest style tilts are value (+0.56), investment (+0.11). Together the factors explain 89% of its month-to-month returns.
+After 2024, the 30-month sample is short, so comparisons are uncertain. The alpha barely changed (change t-stat 0.02), and it remained insignificant. The factor loadings did change significantly after correction, mainly a stronger value tilt, rising by 0.31.
 
-**After 2024.** Alpha changed by +0.05% a year (t = 0.02); a joint test that all loadings stayed the same gives p = 0.000. The post-2024 sample is short, so treat this comparison as tentative.
+_Source: language model, numbers checked._
 
 ## IWF: iShares Russell 1000 Growth ETF
 
-**Main period 2010-2023 (2010-01 to 2023-12, 168 months).** Measured against the market alone, IWF earned +1.71% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +0.75% a year (t = 1.26), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.06 and its largest style tilts are value (-0.21), investment (-0.14). Together the factors explain 98% of its month-to-month returns.
+The iShares Russell 1000 Growth ETF (IWF) shows no evidence of investment skill. Alpha, the return left over after accounting for market and style effects, was not statistically significant in any model, even before the strict correction for running many tests at once. In the market-only model, alpha was about 1.7% per year. In the larger models it shrank to roughly 0.8%, so the apparent outperformance mostly reflected exposure to common factors rather than skill.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, IWF earned -3.73% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +0.39% a year (t = 0.15), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.02 and its largest style tilts are value (-0.46), size (-0.12). Together the factors explain 96% of its month-to-month returns.
+The clearest exposure is a strong lean away from value stocks, meaning those priced low relative to their accounting value. IWF behaves like a bet on growth companies. It also tilts toward big companies rather than small ones, and its market sensitivity (beta) is about 1.06, so it moves slightly more than the overall market. It also leans mildly toward firms that invest aggressively.
 
-**After 2024.** Alpha changed by -0.36% a year (t = -0.15); a joint test that all loadings stayed the same gives p = 0.000. The post-2024 sample is short, so treat this comparison as tentative.
+After 2024, alpha turned slightly lower, but the change was tiny and statistically indistinguishable from zero. The factor loadings did change significantly, mainly through a stronger tilt away from value. With only 30 months of data, that comparison is uncertain.
+
+_Source: language model, numbers checked._
 
 ## PDP: Invesco Dorsey Wright Momentum ETF
 
-**Main period 2010-2023 (2010-01 to 2023-12, 168 months).** Measured against the market alone, PDP earned -0.81% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -1.97% a year (t = -1.78), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.03 and its largest style tilts are momentum (+0.27), investment (-0.18). Together the factors explain 92% of its month-to-month returns.
+PDP is a fund that buys stocks that have recently been rising. The analysis asks whether it earned anything beyond what its exposure to common market drivers (called factors) would predict. That leftover is called alpha. For 2010 to 2023, alpha was negative in every model, about -1.97% a year in the fullest one. After correcting for the many tests run, none of this is statistically distinguishable from zero, so there is no evidence of skill or of its absence.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, PDP earned -6.17% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -5.57% a year (t = -0.90), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 0.99 and its largest style tilts are momentum (+0.60), size (+0.32). Together the factors explain 86% of its month-to-month returns.
+The fund moves almost one-for-one with the overall market (a market exposure of 0.99 to 1.03). It leans strongly toward recent winners, with a momentum loading of 0.27. It also tilts away from stocks priced low relative to their accounting value, with a value loading of -0.1, and slightly toward smaller companies.
 
-**After 2024.** Alpha changed by -3.59% a year (t = -1.18); a joint test that all loadings stayed the same gives p = 0.000. The post-2024 sample is short, so treat this comparison as tentative.
+From March 2024 to August 2026, only 30 months, alpha was more negative, at -5.57% a year. The change from the earlier period was not statistically meaningful. The factor exposures did change significantly, with momentum rising to 0.6. The short sample makes this comparison uncertain.
+
+_Source: language model, numbers checked._
 
 ## FCNTX: Fidelity Contrafund (active)
 
-**Main period 2010-2023 (2010-01 to 2023-12, 168 months).** Measured against the market alone, FCNTX earned +1.38% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +0.55% a year (t = 0.66), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 0.98 and its largest style tilts are investment (-0.24), value (-0.12). Together the factors explain 95% of its month-to-month returns.
+Fidelity Contrafund shows no statistical evidence of manager skill. In the 2010-2023 period, its "alpha" (return beyond what its risks explain) was not significant in any of the four models, even after correcting for the many tests run. That also holds when each model is judged among the nine funds. The simple market-only estimate of 1.38% a year shrank to 0.54% once size, value, and momentum were added, and 0.55% in the fullest model. So the apparent edge mostly reflected exposure to common factors, and it was never distinguishable from zero.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, FCNTX earned +0.95% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +2.22% a year (t = 0.57), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 0.99 and its largest style tilts are investment (+0.21), value (-0.19). Together the factors explain 89% of its month-to-month returns.
+Three exposures matter most. The fund moves almost one-for-one with the overall market (about 0.98). It leans toward growth stocks, which are priced high relative to their accounting value (value loading -0.24 in one model). It also tilts toward large companies and, more modestly, toward firms that invest aggressively.
 
-**After 2024.** Alpha changed by +1.67% a year (t = 0.89); a joint test that all loadings stayed the same gives p = 0.000. The post-2024 sample is short, so treat this comparison as tentative.
+After 2024, alpha rose by 1.67 points a year, but its t-statistic of 0.89 means that change is not reliable. The factor loadings did change significantly after correction, notably the investment tilt, which turned from negative to positive. With only 30 months, that comparison remains uncertain.
+
+_Source: language model, numbers checked._
 
 ## ARKK: ARK Innovation ETF (active)
 
-**Main period 2010-2023 (2014-11 to 2023-12, 110 months).** Measured against the market alone, ARKK earned -2.58% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +4.20% a year (t = 0.88), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.55 and its largest style tilts are profitability (-1.20), value (-0.64). Together the factors explain 82% of its month-to-month returns.
+ARK Innovation ETF shows no evidence of investing skill. After correcting for the many comparisons run, none of the 36 tests is significant, and no single model reaches significance even among its own nine funds. Alpha, the return left over after accounting for common drivers, was -2.58% a year against the market alone, then -1.35%, 3.76% and 4.2% as more factors were added. Its sign changed, which suggests the early picture mostly reflected exposure to common factors, and every version is statistically indistinguishable from zero.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, ARKK earned -8.87% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +6.65% a year (t = 0.44), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.55 and its largest style tilts are value (-1.37), profitability (-1.14). Together the factors explain 76% of its month-to-month returns.
+The fund's behavior is clearer. It amplifies the market, with a beta (sensitivity) of about 1.5 to 1.7. It behaves like a bet on small companies, and leans strongly away from value stocks, which are priced low relative to their accounting value, favoring expensive growth names. It also tilts toward firms with weak profitability.
 
-**After 2024.** Alpha changed by +2.45% a year (t = 0.19); a joint test that all loadings stayed the same gives p = 0.093. The post-2024 sample is short, so treat this comparison as tentative.
+After 2024, over just 30 months, the pattern looked similar. The alpha change was small (t-stat 0.19), and loadings did not significantly change after correction. The short sample makes this comparison uncertain.
+
+_Source: language model, numbers checked._
 
 ## BOTZ: Global X Robotics & AI ETF
 
-**Main period 2010-2023 (2016-10 to 2023-12, 87 months).** Measured against the market alone, BOTZ earned -4.99% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -2.44% a year (t = -0.42), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.24 and its largest style tilts are profitability (-0.42), investment (-0.27). Together the factors explain 78% of its month-to-month returns.
+The Global X Robotics & AI ETF (BOTZ) shows no reliable evidence of investment skill. Skill is measured by "alpha," the return left over after accounting for the fund's exposure to broad market patterns. In 2016-2023, alpha was negative in every model, from -4.99% a year in the market-only model to about -2.4% in the richest one. None of these was statistically significant, even before the stricter correction for running many tests. The shrinkage suggests the apparent shortfall partly reflected common factor exposures rather than manager choices.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, BOTZ earned -17.02% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes -16.13% a year (t = -1.97), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.41 and its largest style tilts are investment (+0.27), momentum (+0.25). Together the factors explain 79% of its month-to-month returns.
+The fund's biggest trait is high market sensitivity: a beta of about 1.25 means it tends to move more than the overall stock market. It also leans toward growth stocks, meaning companies not priced low relative to their accounting value (value loading -0.35 in the three-factor model). In the larger models it tilts toward firms with weaker profitability (about -0.4).
 
-**After 2024.** Alpha changed by -13.68% a year (t = -1.56); a joint test that all loadings stayed the same gives p = 0.177. The post-2024 sample is short, so treat this comparison as tentative.
+After March 2024, alpha looked worse, around -16% to -17% a year. The change of -13.68 has a t-statistic of -1.56, which is not convincing, and 30 months is a short sample. The factor exposures did not change significantly.
+
+_Source: language model, numbers checked._
 
 ## AIQ: Global X Artificial Intelligence & Technology ETF
 
-**Main period 2010-2023 (2018-06 to 2023-12, 67 months).** Measured against the market alone, AIQ earned +1.84% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +3.64% a year (t = 1.08), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.06 and its largest style tilts are value (-0.29), profitability (-0.22). Together the factors explain 91% of its month-to-month returns.
+AIQ is an exchange-traded fund holding artificial intelligence and technology companies. The data show no evidence of skill. Alpha, the return left over after accounting for broad market forces, was 1.8% a year in the market-only model and 3.6% in the richest model. After correcting for running 36 tests, none of these is distinguishable from luck, and none is significant even among the nine funds within each model.
 
-**Extension 2024-03 to 2026-08 (2024-03 to 2026-08, 30 months).** Measured against the market alone, AIQ earned +1.82% a year of alpha. After adding size, value, profitability, investment and momentum factors that becomes +1.52% a year (t = 0.24), so the fund shows no alpha that survives the multiple-testing correction. Its market beta is 1.39 and its largest style tilts are profitability (-0.80), size (-0.49). Together the factors explain 91% of its month-to-month returns.
+The fund's main trait is high market sensitivity. Its beta, a measure of how strongly it moves with the overall stock market, was about 1.1, so it tends to swing a bit more than the market. It also has a negative value loading, meaning it behaves like the opposite of stocks priced low relative to their accounting value: a growth-oriented tilt. Its small-company tilt was mild and faded in the larger models.
 
-**After 2024.** Alpha changed by -2.12% a year (t = -0.46); a joint test that all loadings stayed the same gives p = 0.008. The post-2024 sample is short, so treat this comparison as tentative.
+After 2024, alpha barely changed, down 2.1 points with a t-statistic of -0.46, which is noise. The factor loadings did change significantly after correction: market sensitivity rose, and the fund leaned toward large companies and less profitable firms. With only 30 months of data, that comparison is uncertain.
+
+_Source: language model, numbers checked._
