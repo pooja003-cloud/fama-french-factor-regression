@@ -1,0 +1,122 @@
+# Is it alpha, or just factors? A Fama-French regression study
+
+Do well-known funds earn real alpha, or is their performance explained by exposure to common, cheaply available risk factors (market, size, value, profitability, investment, momentum)?
+
+This project regresses the monthly excess returns of 9 funds and ETFs on the CAPM, the Fama-French 3- and 5-factor models, and the 5-factor model plus momentum, with Newey-West standard errors and a Bonferroni correction. Rolling 36-month regressions show how exposures drift, an out-of-sample extension asks whether the AI-themed funds' results held after 2024, and an LLM writes a plain-English summary of each fund for a non-quant reader.
+
+> **Results:** see [`results/summary.md`](results/summary.md) for every table and figure, and [`results/explanations.md`](results/explanations.md) for the plain-English write-ups.
+
+![Alpha by model](results/figures/alpha_by_model_original.png)
+
+## Funds
+
+| Ticker | Fund | Role | Sample |
+|---|---|---|---|
+| SPY | SPDR S&P 500 ETF | Sanity check (beta ≈ 1, alpha ≈ 0) | 2010-01 to 2023-12 |
+| IWM | iShares Russell 2000 | Small-cap | 2010-01 to 2023-12 |
+| IWD | iShares Russell 1000 Value | Value | 2010-01 to 2023-12 |
+| IWF | iShares Russell 1000 Growth | Growth | 2010-01 to 2023-12 |
+| PDP | Invesco DWA Momentum | Momentum | 2010-01 to 2023-12 |
+| FCNTX | Fidelity Contrafund | Active, long history | 2010-01 to 2023-12 |
+| ARKK | ARK Innovation | Active, thematic | first full month to 2023-12 |
+| BOTZ | Global X Robotics & AI | AI / robotics theme | first full month to 2023-12 |
+| AIQ | Global X AI & Technology | AI theme | first full month to 2023-12 |
+
+PDP is used for momentum rather than MTUM because MTUM launched in 2013 and would not cover the full 2010 sample. Young funds start at their **first full month** of returns, derived from the price history (the launch month is partial and excluded), and are dropped if they have fewer than 60 months. The fund list lives in [`ff_alpha/config.py`](ff_alpha/config.py).
+
+## Method
+
+**Data.** Monthly total returns (dividends reinvested) from Yahoo Finance via `yfinance`; factors and the risk-free rate from the [Kenneth French data library](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) via `pandas-datareader` (with a direct-download fallback). Excess returns use the **French RF column**, the same T-bill series behind `Mkt-RF`, so fund and market excess returns are measured consistently.
+
+**Models** (all on excess returns):
+
+| Model | Factors |
+|---|---|
+| CAPM | Mkt-RF |
+| FF3 | + SMB, HML |
+| FF5 | + RMW, CMA |
+| FF5+MOM | + MOM |
+
+**Inference.** OLS point estimates with Newey-West (HAC) standard errors, 6 lags by default; every table is re-run with 3 and 12 lags and flags any fund whose verdict changes. p-values use the t-distribution. Alpha is reported annualized (monthly × 12).
+
+**Multiple testing.** With 9 funds × 4 models = 36 alpha tests per period, about two "significant" alphas would appear at the 5% level by luck alone. An alpha is only called significant if `p × number of tests < 0.05` (Bonferroni).
+
+**Short-sample guard.** In samples under 60 months (the 2024+ extension), the Newey-West estimator can pick up spurious negative autocorrelation and produce standard errors *smaller* than plain OLS. On simulated data with zero true alpha this produced a t-stat of 3.9 from 29 months (plain OLS: 1.85). Below 60 months, standard errors are therefore floored at the OLS value; the raw NW t-stat is kept in `regressions.csv` as `alpha_t_nw_raw`.
+
+**Rolling exposures.** 36-month rolling FF5+MOM regressions for every fund, from 2010 (or inception) through the latest factor month. Point estimates only: overlapping windows are not independent tests.
+
+## Extension: does it still hold after 2024?
+
+The original study covers January 2010 to December 2023 (168 months for established funds). The extension runs from March 2024 to the latest month in the French library (updated with a lag of a few months), and asks: **did the AI-themed funds' alpha and exposures persist, or were their returns mostly market, growth and momentum beta?**
+
+Three pieces of evidence:
+1. The same four models re-estimated on the extension sample alone.
+2. A pooled regression across both periods with a post-2024 dummy interacted with every factor: `y = a + b'f + d·POST + g'(f·POST) + e`. `d` is the change in alpha, each `g` the change in a loading, plus a joint Wald test that no loading changed.
+3. Rolling 36-month loadings with the extension period shaded.
+
+The extension is short (around 2-2.5 years), so it has low statistical power; results are framed as indicative.
+
+![Rolling exposures](results/figures/rolling_ai_vs_market.png)
+
+## AI add-on
+
+[`ff_alpha/explain.py`](ff_alpha/explain.py) sends each fund's computed numbers (as JSON) to an LLM with instructions to use only those numbers, explain the 2-3 exposures that matter in everyday terms, and treat the Bonferroni-adjusted result as the final verdict. Set `ANTHROPIC_API_KEY` to enable it (model configurable with `FF_LLM_MODEL`); without a key, a deterministic template writes the summaries so the pipeline always completes.
+
+## Run it
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+python -m pytest -q                 # offline tests on simulated data
+python run.py --demo --no-llm       # whole pipeline on simulated data -> results_demo/
+python run.py                       # real data -> results/
+export ANTHROPIC_API_KEY=...        # optional, for LLM explanations
+```
+
+Downloads are cached in `data/raw/`; use `--refresh` to re-download (the French library is revised occasionally, so note the download date when quoting numbers).
+
+### Outputs
+
+| File | Contents |
+|---|---|
+| `results/summary.md` | Sanity check, fund samples, alpha and loading tables, robustness, extension tests |
+| `results/regressions.csv` | Every fund × model × period × lag: alpha, t, p, Bonferroni p, loadings, R² |
+| `results/structural_change.csv` | Pre/post-2024 change in alpha and loadings |
+| `results/rolling_loadings.csv` | Rolling 36-month estimates |
+| `results/explanations.md` | Plain-English summary per fund |
+| `results/figures/` | Alpha by model, loadings heatmap, R², rolling charts |
+
+## Validation
+
+The test suite simulates factor returns and funds with **known** alphas and loadings (including a momentum shift after 2024 for the AI funds) and checks that the pipeline recovers them, that SPY-like funds give beta ≈ 1 and alpha ≈ 0, that a fund's launch month is excluded, that Bonferroni is applied correctly, and that the French CSV parser handles the file layout. CI runs the tests and the demo pipeline on every push.
+
+## Interview talking points
+
+- **Most "alpha" is factor exposure.** CAPM alpha measures performance against the market only. A fund that tilts toward small, cheap, profitable or recently winning stocks will show CAPM alpha simply because those tilts earned premiums. Adding the factors re-labels that return as beta, which can be bought cheaply through ETFs. The alpha-by-model chart shows this directly.
+- **R² tells you how much is left to explain.** Broad ETFs typically have R² well above 0.9 in the 5-factor model; little room remains for skill. Thematic and active funds have lower R², so idiosyncratic bets drive more of their returns, in either direction.
+- **Significance needs care.** Monthly returns are autocorrelated and heteroskedastic (Newey-West), you test many funds (Bonferroni), and short samples can make HAC standard errors misleadingly small (the guard above).
+- **Exposures drift.** The rolling charts show loadings are not constant; a fund's "style" in one window can differ sharply from another, which matters for risk management and for judging a manager.
+- **Out-of-sample discipline.** Re-testing on post-2024 data rather than re-tuning on it.
+
+## Limitations
+
+- Fund returns are net of fees, so alpha is what an investor actually received, not the manager's gross skill.
+- The French market factor is all CRSP stocks (including small caps), so SPY's CAPM alpha is not exactly zero; large-cap outperformance shows up as a small alpha and slightly negative size loading.
+- Survivorship: funds were chosen in 2026, knowing they still exist.
+- Yahoo adjusted prices are convenient but not research-grade; CRSP mutual fund data would be the professional source.
+- Bonferroni is conservative; Holm or Benjamini-Hochberg would be less strict alternatives.
+
+## Project structure
+
+```
+ff_alpha/
+  config.py    funds, periods, models, settings
+  data.py      French factors, fund returns, synthetic data
+  models.py    regressions, Bonferroni, pre/post-2024 test
+  rolling.py   rolling 36-month regressions
+  report.py    tables and figures
+  explain.py   LLM plain-English explanations
+run.py         runs the full study
+tests/         offline tests on simulated data
+```

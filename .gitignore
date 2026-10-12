@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+.DS_Store
+
+# downloaded data (re-created by `python run.py --refresh`)
+data/raw/
+
+# synthetic-data output from `python run.py --demo`
+results_demo/
+
+# delivery archive
+fama-french-alpha.zip

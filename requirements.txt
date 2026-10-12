@@ -1,0 +1,10 @@
+pandas>=2.1
+numpy>=1.26
+scipy>=1.11
+statsmodels>=0.14
+pandas-datareader>=0.10
+yfinance>=0.2.40
+matplotlib>=3.8
+requests>=2.31
+anthropic>=0.40   # optional: only for the LLM explanations
+pytest>=8         # tests
